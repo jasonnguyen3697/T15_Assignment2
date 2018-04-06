@@ -4,7 +4,7 @@ var serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours 
+  databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours
 });
 
 var db = admin.database();
@@ -24,7 +24,7 @@ ref.on("child_added", function(snapshot) {
 //SOCKETIO INITIALIZATION
 var fs =require('fs')
          , http=require('http')
-         , socketio=require('socket.io');
+         , socket=require('socket.io');
 
 var server=http.createServer(function(req, res) {
             res.writeHead(200, { 'Content-type': 'text/html'});
@@ -32,6 +32,8 @@ var server=http.createServer(function(req, res) {
             }).listen(8080, function() {
             console.log('Listening at: http://localhost:8080');
  });
+
+ var io = socket(server);
 
 //ARDUINO CODE
 var five = require("johnny-five");
@@ -47,79 +49,73 @@ var ledstate= true;
 
 
 board.on("ready", function() {
-    
-    var motion = new five.Motion(8);
-    var led = new five.Led(13);
-    
-    motion.on("calibrated", function() {
-        console.log("SENSOR IS WORKING");
-        console.log(idarray);
-        console.log(timearray);
-    
-    });
-    
-    motion.on("motionstart", function() {
-        if (sensoron){
-            starttime=new Date().getTime();
-            console.log("Motion Start at " + starttime);
-            //led.on();    
-        }
-    });
-    
-    motion.on("motionend", function() {
-        if (sensoron){
-            endtime=new Date().getTime();
-            console.log("Motion lasted : " + (endtime-starttime-offset)/1000);
 
-            if ((endtime-starttime-offset)>threshold){
-                ref.push({
-                    id:databaselength,
-                    time:(endtime-starttime-offset)/1000//Get time of motion in seconds
-                });     
-            }                    
-            //led.off();
-            //led.toggle();
-        }
-    });
-    
-    socketio.listen(server).on('connection', function (socket) {
-        socket.on('sensorchange', function(){
-            if (sensoron){
-                sensoron=0;
-                socket.emit('Sensoroff');
-                console.log('Sensor turned off');
-            }  
-            else{
-                sensoron=1;
-                socket.emit('Sensoron');
-                console.log('Sensor turned on');
-            }  
-        });
-    
-        socket.on('ledchange', function(){
-            if (ledstate){
-                ledstate=false;
-                socket.emit('LEDoff');
-                console.log('LED turned off');
-            }  
-            else{
-                ledstate=true;
-                socket.emit('LEDon');
-                console.log('LED turned off');
-            }          
-        });
+  var motion = new five.Motion(8);
+  var led = new five.Led(13);
 
-        socket.on('reset', function(){
-            ref.remove()
-                .then(function() {
-                console.log("Database cleared");
-            });
-        });
+  motion.on("calibrated", function() {
+      console.log("SENSOR IS WORKING");
+      console.log(idarray);
+      console.log(timearray);
+
+  });
+
+  motion.on("motionstart", function() {
+      if (sensoron){
+          starttime=new Date().getTime();
+          console.log("Motion Start at " + starttime);
+          //led.on();
+      }
+  });
+
+  motion.on("motionend", function() {
+      if (sensoron){
+          endtime=new Date().getTime();
+          console.log("Motion lasted : " + (endtime-starttime-offset)/1000);
+
+          if ((endtime-starttime-offset)>threshold){
+              ref.push({
+                  id:databaselength,
+                  time:(endtime-starttime-offset)/1000//Get time of motion in seconds
+              });
+          }
+          //led.off();
+          //led.toggle();
+      }
+  });
+
+  io.on('connection', function (socket) {
+    socket.on('sensorchange', function(){
+      if (sensoron){
+          sensoron=0;
+          socket.emit('Sensoroff');
+          console.log('Sensor turned off');
+      }
+      else{
+          sensoron=1;
+          socket.emit('Sensoron');
+          console.log('Sensor turned on');
+      }
     });
+
+    socket.on('ledchange', function(){
+      if (ledstate){
+          ledstate=false;
+          socket.emit('LEDoff');
+          console.log('LED turned off');
+      }
+      else{
+          ledstate=true;
+          socket.emit('LEDon');
+          console.log('LED turned off');
+      }
+    });
+
+    socket.on('reset', function(){
+      ref.remove()
+          .then(function() {
+          console.log("Database cleared");
+      });
+    });
+  });
 });
-
-
-    
-
-
-

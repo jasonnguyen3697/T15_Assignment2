@@ -1,0 +1,26 @@
+#longMsg {
+    margin-top:5px;
+    font-size: 12px;
+    text-align: center;
+}
+
+#shortMsg {
+    margin-top:5px;
+    font-size: 12px;
+}
+
+#visitor {
+    margin-top:5px;
+    font-size: 12px;
+}
+
+#reset {
+    margin-top:5px;
+    margin-left: 47.5%;
+    width: 60px;
+    color: white;
+    text-align: center;
+    padding: 4px;
+    background: black;
+    font-size: 20px;
+}
