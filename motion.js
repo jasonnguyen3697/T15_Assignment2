@@ -125,6 +125,6 @@ socketio.listen(server).on('connection', function (socket) {
        });
 
        socket.on('reset', function () {
-
+          ref.remove();
        });
 });
