@@ -125,6 +125,12 @@ socketio.listen(server).on('connection', function (socket) {
        });
 
        socket.on('reset', function () {
-          ref.remove();
+          ref.remove()
+          .then(function() {
+          console.log("Database cleared");
+          });
+          .catch(function(error) {
+          console.log('Error:', error);
+          });
        });
 });
