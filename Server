@@ -6,7 +6,7 @@ var serviceAccount = require("./serviceAccountKey.json");
 // Initialize the app with a service account, granting admin privileges
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://project1-9aa9d.firebaseio.com"  // IMPORTANT: repalce the url with yours 
+  databaseURL: "https://fit3140t15p1.firebaseio.com"  // IMPORTANT: repalce the url with yours 
 });
 
 // As an admin, the app has access to read and write all data, regardless of Security Rules
@@ -18,10 +18,51 @@ ref.on("value", function(snapshot) {   //this callback will be invoked with each
   console.log("The read failed: " + errorObject.code);
 });
 
-// How to push new object
-ref.push({
-    id:1,
-    type:'motion',
-    action:'on',
-    time:12346789
-});
+var another=false;
+var on=false;
+var idno=1;
+var sensormode=false;
+function switchoff(){
+    if(another)
+    {
+      setTimeout(switchoff2,500)
+    }
+    else
+    {
+    //set LED to off
+    }
+}
+function switchoff2(){
+  //set LED to off
+}
+
+function reset()
+{
+
+}
+
+function sensorstate(){
+
+}
+function sensed()
+{
+  if(sensormode)
+  {
+    ref.push({
+      id:idno,
+      type:'motion',
+      action:'on',
+      time:now()
+    });
+    if (on==false)
+    {
+      on=true;
+      setTimeout(switchoff,1500)
+    }
+    else
+    {
+      another=true;
+    }
+    idno++;
+  }
+}
