@@ -27,6 +27,7 @@ ref.on("value", function(snapshot) {   //this callback will be invoked with each
 */
 
 
+
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
     console.log("Id: " + newentry.id);
@@ -46,10 +47,10 @@ var endtime=0;
 var threshold=500;
 var offset=1000*3.7;
 var sensoron=1;
-
+var led = new five.Led(13);
 
 board.on("ready", function() {
-    var led = new five.Led(13);
+    
     var motion = new five.Motion(8);
 
     motion.on("calibrated", function() {
@@ -81,4 +82,49 @@ board.on("ready", function() {
             led.off();    
         }
     });
+});
+var fs =require('fs')
+         , http=require('http')
+         , socketio=require('socket.io');
+var server=http.createServer(function(req, res) {
+            res.writeHead(200, { 'Content-type': 'text/html'});
+            res.end(fs.readFileSync(__dirname+'/index.html'));
+            }).listen(8080, function() {
+            console.log('Listening at: http://localhost:8080');
+ });
+var ledstate= True;
+socketio.listen(server).on('connection', function (socket) {
+       socket.on('sensorchange', function () {
+       if (sensoron)
+       {
+         sensoron=0;
+         socket.emit('Sensoroff');
+         console.log('Sensor turned off');
+       }  
+       else
+       {
+         sensoron=1;
+         socket.emit('Sensoron');
+         console.log('Sensor turned on');
+       }  
+       });
+       socket.on('ledchange', function () {
+       led.toggle();
+       if (ledstate)
+       {
+         ledstate=False;
+         socket.emit('LEDoff');
+         console.log('LED turned off');
+       }  
+       else
+       {
+         ledstate=True;
+         socket.emit('LEDon');
+         console.log('LED turned off');
+       }          
+       });
+
+       socket.on('reset', function () {
+
+       });
 });
