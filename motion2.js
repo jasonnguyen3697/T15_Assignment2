@@ -21,6 +21,8 @@ ref.on("child_added", function(snapshot) {
     timearray.push(newentry.time);
     databaselength+=1;
 });
+
+
 //SOCKETIO INITIALIZATION
 var fs =require('fs')
          , http=require('http')
@@ -83,8 +85,11 @@ board.on("ready", function() {
           //led.toggle();
       }
   });
+});
 
-  io.on('connection', function (socket) {
+io.listen(server).on('connection', function (socket) {
+    console.log('User Connected')
+    
     socket.on('sensorchange', function(){
       if (sensoron){
           sensoron=0;
@@ -114,8 +119,10 @@ board.on("ready", function() {
     socket.on('reset', function(){
       ref.remove()
           .then(function() {
-          console.log("Database cleared");
+            idarray=[];
+            timearray=[];
+            console.log("Database cleared");
+
       });
     });
   });
-});
