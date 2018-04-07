@@ -86,15 +86,8 @@ board.on("ready", function() {
       }
   });
 });
-
-<<<<<<< HEAD
-  io.on('connection', function (socket) {
-    console.log("Device connected: " + socket.id)
-=======
 io.listen(server).on('connection', function (socket) {
     console.log('User Connected')
-    
->>>>>>> b192f3c18562bc875d25c4c04c35da174de90f49
     socket.on('sensorchange', function(){
       if (sensoron){
           sensoron=0;
@@ -130,4 +123,4 @@ io.listen(server).on('connection', function (socket) {
 
       });
     });
-  });
+});

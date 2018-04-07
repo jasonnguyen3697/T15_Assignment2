@@ -1,110 +1,32 @@
-<!DOCTYPE html>
-
 <html>
-  <head>
-      <meta charset="utf-8">
-      <title>Traffic analyser</title>
-<<<<<<< HEAD
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-=======
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-      <script src="/socket.io/socket.io.js"></script>
->>>>>>> b192f3c18562bc875d25c4c04c35da174de90f49
-      <link rel="stylesheet" href="main.css">
-  </head>
-    
-<script>
-var iosocket=io.connect();
-    
-//GOOGLE FIREBASE INITIALIZATION
-var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours
-});
-
-var ref= admin.database().ref("/motionSensorData");;
-var long=0;
-var short=0;
-var visitors=0;
-var data=[];
-var threshold=3;
-
-
-ref.on("child_added", function(snapshot) {
-    var newentry = snapshot.val();
-    var newtime=newentry.time;
-    data.push(newentry.time);
-    
-    if (newtime>threshold){
-        long+=1;    
-    }
-    else{
-        short+=1;    
-    }
-    
-    if (data.length()>3){
-        if (data[data.length()-1]>threshold && data[data.length()-2]<threshold && data[data.length()-3]>threshold && data[data.length()-4]>threshold){
-            visitors+=1;                                                                               
-        }        
-        
-    }
-    console.log(long);
-    console.log(short);
-    console.log(visitors);
-});
-    
-
-function ToggleLed(){
-    iosocket.emit('ledchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('LED Toggled');
-}
-function SensorToggle(){
-    iosocket.emit('sensorchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('Sensor Toggled');
-}
-function ResetDatabase(){
-    iosocket.emit('reset');
-    //$('#IncomingServerMessages').append($('<li></li>').text('Database Reset');
-}        
-</script>    
-    
-        
-  <body>
-      
-      <div id='longMsg'>Number of long messages:</div>
-      <div id='shortMsg'>Number of short messages:</div>
-      <div id='visitor'>Number of visitors:</div>
-<<<<<<< HEAD
-      <div id='reset'>RESET</div>
-      <div id='LEDtoggle'>LED switch</div>
-      <div id='Sensortoggle'>Sensor switch</div>
-      
-    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-    <script>
-      // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyCXOuC_ILczmYC5TQ7pFYOWSq9BvHOdsM0",
-        authDomain: "fit3140t15p1.firebaseapp.com",
-        databaseURL: "https://fit3140t15p1.firebaseio.com",
-        projectId: "fit3140t15p1",
-        storageBucket: "fit3140t15p1.appspot.com",
-        messagingSenderId: "599348552467"
-      };
-      firebase.initializeApp(config);
-    </script>
-      <script src="/traffic_analyser.js"></script>
-      <script>var iosocket=io.connect();</script>
-=======
-      <button type="button" onClick="ToggleLed()">LED Toggle</button>
-      <button type="button" onClick="SensorToggle()">Sensor Toggle</button>
-      <button type="button" onClick="ResetDatabase()">Clear Database</button>
-      <div class=servermessages>Server messages:<ul id="IncomingServerMessages"; ></ul></div>
-     
-
->>>>>>> b192f3c18562bc875d25c4c04c35da174de90f49
-  </body>
-
+    <head>
+        <title>Traffic analyser</title>
+        <link rel="stylesheet" href = "main.css">
+    </head>
+    <body>
+        <div id='longMessage'>long</div>
+        <div id='shortMessage'>short</div>
+        <div id='visitorCount'>count</div>
+        <div id='serverMessage'>server</div>
+        <button id= "ledToggle" type="button" onClick="ToggleLed()">LED Toggle</button>
+        <button id= "sensorToggle" type="button" onClick="SensorToggle()">Sensor Toggle</button>
+        <button id= "reset" type="button" onClick="ResetDatabase()">Reset</button>
+        <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyCXOuC_ILczmYC5TQ7pFYOWSq9BvHOdsM0",
+            authDomain: "fit3140t15p1.firebaseapp.com",
+            databaseURL: "https://fit3140t15p1.firebaseio.com",
+            projectId: "fit3140t15p1",
+            storageBucket: "fit3140t15p1.appspot.com",
+            messagingSenderId: "599348552467"
+          };
+          firebase.initializeApp(config);
+        </script>
+        <script src="index.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>var iosocket=io.connect();</script>
+    </body>
 </html>
