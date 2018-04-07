@@ -48,6 +48,8 @@ var threshold=500;
 var offset=1000*3.7;
 var sensoron=1;
 var ledstate= true;
+var inuse=false;
+var extra=false;
 
 
 board.on("ready", function() {
@@ -63,6 +65,20 @@ board.on("ready", function() {
   });
 
   motion.on("motionstart", function() {
+    if (ledstate)
+    {
+      led.on();
+      if (inuse)
+      {
+        extra=false;
+      }
+      else
+      {
+        inuse=true;
+      }
+    }
+
+    
       if (sensoron){
           starttime=new Date().getTime();
           console.log("Motion Start at " + starttime);
@@ -85,6 +101,21 @@ board.on("ready", function() {
           //led.toggle();
       }
   });
+  setTimeout(turnOff,1500);
+  function turnOff(){
+    if(extra)
+    {
+      setTimeout(turnOff2,500);
+    }
+    else
+    {
+      led.off();
+    }
+  }
+    function turnOff2(){
+      led.off();
+    }
+  }  
 });
 
 <<<<<<< HEAD
