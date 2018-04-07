@@ -85,6 +85,7 @@ board.on("ready", function() {
   });
 
   io.on('connection', function (socket) {
+    console.log("Device connected: " + socket.id)
     socket.on('sensorchange', function(){
       if (sensoron){
           sensoron=0;
