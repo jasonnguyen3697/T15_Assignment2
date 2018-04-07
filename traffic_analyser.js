@@ -1,4 +1,5 @@
 //Make connection
+var io = require('socket.io-client');
 var socket = io.connect('http://localhost:8080', {reconnect: true});
 var ref = firebase.database().ref("/motionSensorData");
 
@@ -15,10 +16,16 @@ var shortMsg = document.getElementById('shortMsg');
 var visitor = document.getElementById('visitor');
 var reset = document.getElementById('reset');
 
+socket.on('connect', function(socket) {
+    console.log('Connected!');
+});
+
 ref.on("child_added", function(snapshot){
   var value = snapshot.val();
   var time = value.time * 1000;
-  if (time > threshold)
+  console.log("Id: " + value.id);
+  console.log("Time: " + value.time);
+  /*if (time > threshold)
   {
     long++;
     longMsg.innerHTML = "Number of long messages: ";
@@ -38,7 +45,7 @@ ref.on("child_added", function(snapshot){
     numVisitor++;
     visitor.innerHTML = "Number of visitors: ";
     visotr.innerHTML += numVisitor;
-  }
+  }*/
 });
 
 reset.addEventListener('click', function(){
