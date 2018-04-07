@@ -15,6 +15,8 @@ var longMsg = document.getElementById('longMsg');
 var shortMsg = document.getElementById('shortMsg');
 var visitor = document.getElementById('visitor');
 var reset = document.getElementById('reset');
+var led = document.getElememntById('LEDtoggle');
+var sensor = document.getElementById('Sensortoggle');
 
 socket.on('connect', function(socket) {
     console.log('Connected!');
@@ -60,4 +62,12 @@ reset.addEventListener('click', function(){
   shortMsg.innerHTML = "Number of short messages: ";
   shortMsg.innerHTML += short;
   sensorStatus = "NNNN";
+});
+
+led.addEventListener('click', function(){
+  socket.emit('ledchange');
+});
+
+sensor.addEventListener('click',function(){
+  socket.emit('sensorchange');
 });
