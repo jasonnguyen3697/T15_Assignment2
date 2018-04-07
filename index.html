@@ -43,31 +43,32 @@ ref.on("child_added", function(snapshot) {
     else{
         short+=1;    
     }
+    
     if (data.length>3){
-        if (data[data.length-1]>threshold && data[data.length-2]<threshold && data[data.length-3]>threshold && data[data.length-4]>threshold){
-            visitors+=1;                                                                               
+        if (data[data.length-1]>threshold && data[data.length-2]>threshold && data[data.length-3]<threshold && data[data.length-4]>threshold){
+            visitors+=1;
         }        
     }
-    
     Initialize();
 });
-    
 
+iosocket.on('Message',function(message){
+    $('#IncomingServerMessages').append($('<li></li>').text(message));   
+    });    
+    
 function ToggleLed(){
     iosocket.emit('ledchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('LED Toggled');
 }
 function SensorToggle(){
     iosocket.emit('sensorchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('Sensor Toggled');
 }
 function ResetDatabase(){
     iosocket.emit('reset');
-    var long=0;
-    var short=0;
-    var visitors=0;
-    var data=[];
-    //$('#IncomingServerMessages').append($('<li></li>').text('Database Reset');
+    long=0;
+    short=0;
+    visitors=0;
+    data=[];
+    Initialize();
 }
 function Initialize(){
     document.getElementById("longMsg").innerHTML =  long;
@@ -75,7 +76,6 @@ function Initialize(){
     document.getElementById("visitorMsg").innerHTML = visitors;
 }    
 </script>    
-    
         
   <body onload="Initialize()">
       <p>Long Motion:   <span id="longMsg"></span></p>
@@ -85,8 +85,6 @@ function Initialize(){
       <button type="button" onClick="SensorToggle()">Sensor Toggle</button>
       <button type="button" onClick="ResetDatabase()">Clear Database</button>
       <div class=servermessages>Server messages:<ul id="IncomingServerMessages"; ></ul></div>
-     
-
   </body>
 
 </html>
