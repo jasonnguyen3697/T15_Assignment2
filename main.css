@@ -23,13 +23,3 @@
     background: black;
     font-size: 20px;
 }
-#block1{
-    float:left;
-    width:30%;
-    height:100%;
-}
-#block2{
-    float:right;
-    width:30%;
-    height:100%;
-}
