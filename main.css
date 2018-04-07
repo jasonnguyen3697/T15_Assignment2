@@ -23,3 +23,9 @@
     background: black;
     font-size: 20px;
 }
+#block1{
+    float=left;
+}
+#block2{
+    float=right;
+}
