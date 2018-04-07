@@ -1,14 +1,11 @@
 //GOOGLE FIREBASE INITIALIZATION
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
-var express = require("express");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours
 });
-var app = express();
-app.use(express.static('public'));
 
 var db = admin.database();
 var ref = db.ref("/motionSensorData"); // channel name
@@ -40,4 +37,5 @@ var server=http.createServer(function(req, res) {
 
  io.on('connection', function(socket){
    console.log("Device connected: " + socket.id);
+   io.to(socket.id).emit('connected')
  });

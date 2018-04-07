@@ -5,7 +5,6 @@
       <meta charset="utf-8">
       <title>Traffic analyser</title>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-      <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
       <link rel="stylesheet" href="main.css">
   </head>
 
@@ -14,13 +13,24 @@
       <div id='shortMsg'>Number of short messages:</div>
       <div id='visitor'>Number of visitors:</div>
       <div id='reset'>RESET</div>
-      <div id='LEDtoggle'>LED switch</dive>
-      <div id='Sensortoggle'>Sensor switch</dive>
-<<<<<<< HEAD
-	    <script src="/traffic_analyser.js"></script>
-=======
-
->>>>>>> 6e8ae4e689db0dc975c013f0b2b427c422ba5833
+      <div id='LEDtoggle'>LED switch</div>
+      <div id='Sensortoggle'>Sensor switch</div>
+      
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCXOuC_ILczmYC5TQ7pFYOWSq9BvHOdsM0",
+        authDomain: "fit3140t15p1.firebaseapp.com",
+        databaseURL: "https://fit3140t15p1.firebaseio.com",
+        projectId: "fit3140t15p1",
+        storageBucket: "fit3140t15p1.appspot.com",
+        messagingSenderId: "599348552467"
+      };
+      firebase.initializeApp(config);
+    </script>
+      <script src="/traffic_analyser.js"></script>
+      <script>var iosocket=io.connect();</script>
   </body>
 
 </html>

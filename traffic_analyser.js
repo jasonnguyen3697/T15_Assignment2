@@ -1,7 +1,18 @@
 //Make connection
 var io = require('socket.io-client');
 var socket = io.connect('http://localhost:8080', {reconnect: true});
-var ref = firebase.database().ref("/motionSensorData");
+
+//GOOGLE FIREBASE INITIALIZATION
+var admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours
+});
+
+var db = admin.database();
+var ref = db.ref("/motionSensorData"); // channel name
 
 //background variables for logic
 var long = 0;
@@ -18,36 +29,32 @@ var reset = document.getElementById('reset');
 var led = document.getElememntById('LEDtoggle');
 var sensor = document.getElementById('Sensortoggle');
 
-socket.on('connect', function(socket) {
-    console.log('Connected!');
-});
-
 ref.on("child_added", function(snapshot){
   var value = snapshot.val();
   var time = value.time * 1000;
-  console.log("Id: " + value.id);
-  console.log("Time: " + value.time);
-  /*if (time > threshold)
+  /*console.log("Id: " + value.id);
+  console.log("Time: " + value.time);*/
+  if (time > threshold)
   {
     long++;
-    longMsg.innerHTML = "Number of long messages: ";
-    longMsg += long;
+    longMsg.innerHTML = "GOT SOMETHING";
+    //longMsg.innerHTML += long;
     sensorStatus = sensorStatus.splice(1, 4);
     sensorStatus += "L";
   }
   else {
     short++;
-    shortMsg.innerHTML = "Number of short messages: ";
-    shortMsg.innerHTML += short;
+    shortMsg.innerHTML = "GOT SOMETHING";
+    //shortMsg.innerHTML += short;
     sensorStatus = sensorStatus.splice(1, 4);
     sensorStatus += "S";
   }
   if (sensorStatus=="LSLL")
   {
     numVisitor++;
-    visitor.innerHTML = "Number of visitors: ";
-    visotr.innerHTML += numVisitor;
-  }*/
+    visitor.innerHTML = "GOT SOMETHING";
+    //visotr.innerHTML += numVisitor;
+  }
 });
 
 reset.addEventListener('click', function(){
