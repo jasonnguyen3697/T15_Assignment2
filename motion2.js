@@ -15,10 +15,9 @@ var databaselength=0; //Need to reset this to 0 when database is reset
 
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
-    console.log("Id: " + newentry.id);
     idarray.push(newentry.id);
-    console.log("Time: " + newentry.time);
     timearray.push(newentry.time);
+    console.log(timearray);
     databaselength+=1;
 });
 
@@ -47,9 +46,7 @@ var endtime=0;
 var threshold=500;
 var offset=1000*3.7;
 var sensoron=1;
-var ledstate= true;
-var inuse=false;
-var extra=false;
+var ledstate= 1;
 
 
 board.on("ready", function() {
@@ -59,30 +56,14 @@ board.on("ready", function() {
 
   motion.on("calibrated", function() {
       console.log("SENSOR IS WORKING");
-      console.log(idarray);
-      console.log(timearray);
+
 
   });
 
   motion.on("motionstart", function() {
-    if (ledstate)
-    {
-      led.on();
-      if (inuse)
-      {
-        extra=false;
-      }
-      else
-      {
-        inuse=true;
-      }
-    }
-
-    
       if (sensoron){
           starttime=new Date().getTime();
           console.log("Motion Start at " + starttime);
-          //led.on();
       }
   });
 
@@ -97,35 +78,13 @@ board.on("ready", function() {
                   time:(endtime-starttime-offset)/1000//Get time of motion in seconds
               });
           }
-          //led.off();
-          //led.toggle();
       }
   });
-  setTimeout(turnOff,1500);
-  function turnOff(){
-    if(extra)
-    {
-      setTimeout(turnOff2,500);
-    }
-    else
-    {
-      led.off();
-    }
-  }
-    function turnOff2(){
-      led.off();
-    }
-  }  
 });
 
-<<<<<<< HEAD
-  io.on('connection', function (socket) {
-    console.log("Device connected: " + socket.id)
-=======
 io.listen(server).on('connection', function (socket) {
     console.log('User Connected')
     
->>>>>>> b192f3c18562bc875d25c4c04c35da174de90f49
     socket.on('sensorchange', function(){
       if (sensoron){
           sensoron=0;
@@ -141,12 +100,12 @@ io.listen(server).on('connection', function (socket) {
 
     socket.on('ledchange', function(){
       if (ledstate){
-          ledstate=false;
+          ledstate=0;
           socket.emit('LEDoff');
           console.log('LED turned off');
       }
       else{
-          ledstate=true;
+          ledstate=1;
           socket.emit('LEDon');
           console.log('LED turned off');
       }
@@ -161,4 +120,10 @@ io.listen(server).on('connection', function (socket) {
 
       });
     });
+    
+    socket.on('msg',function(msg){
+        console.log(msg);    
+    });
+    
+    
   });
