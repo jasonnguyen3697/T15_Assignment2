@@ -78,6 +78,8 @@ function Initialize(){
 </script>    
         
   <body onload="Initialize()">
+    <div id='ui' width='100%'>
+      <h1 id='header' width='100%' align='center'>Traffic Analysis Program</h1>
       <p>Long Motion:   <span id="longMsg"></span></p>
       <p>Short Motion:   <span id="shortMsg"></span></p>
       <p>Visitors:  <span id="visitorMsg"></span></p>
@@ -85,6 +87,7 @@ function Initialize(){
       <button type="button" onClick="SensorToggle()">Sensor Toggle</button>
       <button type="button" onClick="ResetDatabase()">Clear Database</button>
       <div class=servermessages>Server messages:<ul id="IncomingServerMessages"; ></ul></div>
+    </div>
   </body>
 
 </html>
