@@ -4,7 +4,7 @@ var serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://fit3140t15p1.firebaseio.com/"  // IMPORTANT: repalce the url with yours
+  databaseURL: "https://fit3140t15p1.firebaseio.com/" 
 });
 
 var db = admin.database();
