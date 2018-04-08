@@ -81,15 +81,9 @@ board.on("ready", function() {
       }
   });
 });
-<<<<<<< HEAD
-io.listen(server).on('connection', function (socket) {
-    console.log('User Connected')
-=======
 
 io.listen(server).on('connection', function (socket) {
-    console.log('User Connected')
-    
->>>>>>> 3db8bf44cf083812215eaaea8734129b11538e19
+    console.log('User Connected');
     socket.on('sensorchange', function(){
       if (sensoron){
           sensoron=0;
@@ -125,14 +119,4 @@ io.listen(server).on('connection', function (socket) {
 
       });
     });
-<<<<<<< HEAD
 });
-=======
-    
-    socket.on('msg',function(msg){
-        console.log(msg);    
-    });
-    
-    
-  });
->>>>>>> 3db8bf44cf083812215eaaea8734129b11538e19
