@@ -1,25 +1,19 @@
 #longMsg {
-    margin-top:5px;
-    font-size: 12px;
+    margin-top:7px;
+    font-size: 14px;
 }
 
 #shortMsg {
-    margin-top:5px;
-    font-size: 12px;
+    margin-top:7px;
+    font-size: 14px;
 }
 
-#visitor {
-    margin-top:5px;
-    font-size: 12px;
+#visitorMsg {
+    margin-top:7px;
+    font-size: 14px;
 }
 
-#reset {
-    margin-top:5px;
-    margin-left: 47.5%;
-    width: 60px;
-    color: white;
-    text-align: center;
-    padding: 4px;
-    background: black;
-    font-size: 20px;
+.servermessages {
+    margin-top:7px;
+    font-size: 14px;
 }

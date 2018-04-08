@@ -1,37 +1,4 @@
 <html>
-<<<<<<< HEAD
-    <head>
-        <title>Traffic analyser</title>
-        <link rel="stylesheet" href = "main.css">
-    </head>
-    <body>
-        <div id='longMessage'>long</div>
-        <div id='shortMessage'>short</div>
-        <div id='visitorCount'>count</div>
-        <div id='serverMessage'>server</div>
-        <button id= "ledToggle" type="button" onClick="ToggleLed()">LED Toggle</button>
-        <button id= "sensorToggle" type="button" onClick="SensorToggle()">Sensor Toggle</button>
-        <button id= "reset" type="button" onClick="ResetDatabase()">Reset</button>
-        <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-        <script>
-          // Initialize Firebase
-          var config = {
-            apiKey: "AIzaSyCXOuC_ILczmYC5TQ7pFYOWSq9BvHOdsM0",
-            authDomain: "fit3140t15p1.firebaseapp.com",
-            databaseURL: "https://fit3140t15p1.firebaseio.com",
-            projectId: "fit3140t15p1",
-            storageBucket: "fit3140t15p1.appspot.com",
-            messagingSenderId: "599348552467"
-          };
-          firebase.initializeApp(config);
-        </script>
-        <script src="index.js"></script>
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>var iosocket=io.connect();</script>
-    </body>
-</html>
-=======
   <head>
       <meta charset="utf-8">
       <title>Traffic analyser</title>
@@ -54,58 +21,63 @@
     
     
 <script>
-var iosocket=io.connect();
-var database = firebase.database();
-var ref= database.ref("motionSensorData");;
-var long=0;
-var short=0;
-var visitors=0;
-var data=[];
-var threshold=3;
-    
-ref.on("child_added", function(snapshot) {
-    var newentry = snapshot.val();
-    var newtime=newentry.time;
-    data.push(newentry.time);
-    
-    if (newtime>threshold){
-        long+=1;    
-    }
-    else{
-        short+=1;    
-    }
-    if (data.length>3){
-        if (data[data.length-1]>threshold && data[data.length-2]<threshold && data[data.length-3]>threshold && data[data.length-4]>threshold){
-            visitors+=1;                                                                               
-        }        
-    }
-    
-    Initialize();
-});
-    
-
-function ToggleLed(){
-    iosocket.emit('ledchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('LED Toggled');
-}
-function SensorToggle(){
-    iosocket.emit('sensorchange');
-    //$('#IncomingServerMessages').append($('<li></li>').text('Sensor Toggled');
-}
-function ResetDatabase(){
-    iosocket.emit('reset');
+    //javascript for front-end connection to database
+    var iosocket=io.connect();
+    var database = firebase.database();
+    var ref= database.ref("motionSensorData"); //connect to databse
     var long=0;
     var short=0;
     var visitors=0;
     var data=[];
-    //$('#IncomingServerMessages').append($('<li></li>').text('Database Reset');
-}
-function Initialize(){
-    document.getElementById("longMsg").innerHTML =  long;
-    document.getElementById("shortMsg").innerHTML = short;
-    document.getElementById("visitorMsg").innerHTML = visitors;
-}    
-</script>    
+    var threshold=3; //3 seconds threshold between short and long messages
+    
+    //retrieve all children from motionSensorData 
+    ref.on("child_added", function(snapshot) {
+        var newentry = snapshot.val();
+        var newtime=newentry.time;
+        data.push(newentry.time);
+
+        if (newtime>threshold){
+            long+=1;    
+        }
+        else{
+            short+=1;    
+        }
+        //check for LSLL sequence to increment visitor
+        if (data.length>3){
+            if (data[data.length-1]>threshold && data[data.length-2]<threshold && data[data.length-3]>threshold && data[data.length-4]>threshold){
+                visitors+=1;                                                                               
+            }        
+        }
+        //update the fields on html page
+        Initialize();
+    });
+
+
+    function ToggleLed(){
+        iosocket.emit('ledchange');
+        //$('#IncomingServerMessages').append($('<li></li>').text('LED Toggled');
+    }
+    function SensorToggle(){
+        iosocket.emit('sensorchange');
+        //$('#IncomingServerMessages').append($('<li></li>').text('Sensor Toggled');
+    }
+    function ResetDatabase(){
+        iosocket.emit('reset');
+        long=0;
+        short=0;
+        visitors=0;
+        data=[];
+        //reset all fields to zero
+        Initialize();
+        //$('#IncomingServerMessages').append($('<li></li>').text('Database Reset');
+    }
+    function Initialize(){
+        document.getElementById("longMsg").innerHTML =  long;
+        document.getElementById("shortMsg").innerHTML = short;
+        document.getElementById("visitorMsg").innerHTML = visitors;
+    }    
+</script>
     
         
   <body onload="Initialize()">
@@ -121,4 +93,3 @@ function Initialize(){
   </body>
 
 </html>
->>>>>>> 3db8bf44cf083812215eaaea8734129b11538e19
