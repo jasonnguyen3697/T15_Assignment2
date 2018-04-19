@@ -69,14 +69,17 @@ board.on("ready", function() {
           var timeelapsed= (endtime-starttime-offset)/1000 //An offset is used to account for the time it takes for the motion pin to go low
           console.log("Motion lasted : " + timeelapsed);
           if ((endtime-starttime-offset)>0){  //Remove negative times
+            endtime = endtime - offset
             ref.push({ //Push to Google Firebase
                 id:timearray.length,
+                start_time: starttime,
+                end_time: endtime,
                 time:timeelapsed
             });
           }
       }
   });
-            
+
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
     idarray.push(newentry.id);
@@ -87,19 +90,19 @@ ref.on("child_added", function(snapshot) {
             if (!ledstate){ //If LED is not already on (i.e. someone new is entering the corridor), turn LED on
                 console.log('New person detected');
                 ledstate=1;
-                led.strobe(1,CheckLEDState); //Non-blocking way of turning LED on using callback function CheckLEDState (called every time LED is off/on)    
+                led.strobe(1,CheckLEDState); //Non-blocking way of turning LED on using callback function CheckLEDState (called every time LED is off/on)
             }
             else if(ledstate){ //If someone is already in corridor, (LED is on) extend LED illumination by 5 seconds using lednewperson flag
                 console.log('Extending LED');
                 lednewperson=1;
             }
-        }    
+        }
     }
-    
+
 });
 
 //========================================================================SOCKETIO CODE===================================================================================
-    
+
 io.listen(server).on('connection', function (socket) {
     console.log('User Connected');
     socket.on('sensorchange', function(){
@@ -141,15 +144,13 @@ io.listen(server).on('connection', function (socket) {
             console.log("Database cleared");
       });
     });
-<<<<<<< HEAD
-=======
-    
+
     socket.on('msg',function(msg){ //Debugging tool to display stuff in node.js console
-        console.log(msg);    
+        console.log(msg);
     });
   });
-    
-    
+
+
     function CheckLEDState(){ //Function to illuminate corridor
         if (ledon){ //Check if LED is enabled
             if (ledstate && ledcounter>9667){ //Once 15 seconds elapsed, turn off led and reset everything
@@ -165,12 +166,11 @@ io.listen(server).on('connection', function (socket) {
                     ledcounter-=3222; //Around 5 seconds
                 }
                 ledcounter+=1; //LED counter should increment by the same amount every time (around 1 millisecond), so we can use it to time how long the LED is on
-            }   
+            }
         }
         else{
             led.stop().off();
             ledcounter=0;
         }
-    }    
->>>>>>> 9754fd3b3a969d1efc0627835894beea7c9d6381
+    }
 });
