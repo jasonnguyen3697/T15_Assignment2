@@ -58,6 +58,7 @@ board.on("ready", function() {
 
   motion.on("motionstart", function() {
       if (sensoron){ //Sensor toggle using socketio
+          timestamp=new Date();
           starttime=new Date().getTime();
           console.log("Motion Start at " + starttime);
       }
@@ -74,7 +75,7 @@ board.on("ready", function() {
                 id:timearray.length,
                 start_time: starttime,
                 end_time: endtime,
-                timestamp:
+                timestamp: timestamp,
             });
           }
       }
