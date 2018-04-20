@@ -75,7 +75,7 @@ board.on("ready", function() {
                 id:timearray.length,
                 start_time: starttime,
                 end_time: endtime,
-                timestamp: timestamp,
+                time_stamp: timestamp,
             });
           }
       }
