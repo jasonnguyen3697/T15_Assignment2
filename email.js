@@ -10,19 +10,8 @@ admin.initializeApp({
 var db = admin.database();
 var ref = db.ref("/motionSensorData"); // channel name
 
-//=============================================================SOCKETIO INITIALIZATION (FROM WEEK 2 LAB)==========================================================
-var fs =require('fs')
-         , http=require('http')
-         , socket=require('socket.io');
-
-var server=http.createServer(function(req, res) {
-            res.writeHead(200, { 'Content-type': 'text/html'});
-            res.end(fs.readFileSync(__dirname+'/index.html'));
-            }).listen(8080, function() {
-            console.log('Listening at: http://localhost:8080');
- });
 var nodemailer = require('nodemailer');
-var io = socket(server);
+
 var t1 = 2.5;
 var t2 = 5;
 var starttimearray=[];
@@ -110,7 +99,7 @@ ref.on("child_added", function(snapshot) {
     }
     else if (endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]>t2)
     {
-      iosocket.emit('reset');
+      ref.remove();
     }
 
 });
