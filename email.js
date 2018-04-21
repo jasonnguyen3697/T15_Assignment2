@@ -23,12 +23,12 @@ var server=http.createServer(function(req, res) {
  });
 var nodemailer = require('nodemailer');
 var io = socket(server);
-var t1;
-var t2;
+var t1 = 2.5;
+var t2 = 5;
 var starttimearray=[];
 var endtimearray=[];
 var timestamparray=[];
-  
+
 var transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -41,7 +41,7 @@ var transporter = nodemailer.createTransport({
 });
 var mailOptions;
 
-
+//When new data is uploaded
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
     var fivemail='These are the last five motions:'
@@ -49,7 +49,9 @@ ref.on("child_added", function(snapshot) {
     timestamparray.push(newentry.time_stamp);
     starttimearray.push(newentry.start_time); //Append to an array so it is easier to operate on instead of getting from database
     endtimearray.push(newentry.end_time);
+    //Create email content to send
     if (timestamparray.length<5) {
+      //If less than 5 motions have been recorded, only send the motions that have been recorded
       for (i=0;i<timestamparray.length;i++){
         fivemail+='\nMotion ';
         fivemail+=i;
@@ -63,6 +65,7 @@ ref.on("child_added", function(snapshot) {
     }
     else
     {
+        //If 5 or more motions recorded, send five latest motions
         for (i=0;i<5;i++){
         fivemail+='\nMotion ';
         fivemail+=i;
@@ -73,13 +76,14 @@ ref.on("child_added", function(snapshot) {
         fivemail+=', end time= ';
         fivemail+=endtimearray[endtimearray.length-6+i];
       }
-    }  
+    }
     console.log(timearray);
+    //Create mailing preference
     mailOptions = {
       from: 'fit3140.team15.s12018@gmail.com',
       to: 'fit3140.team15.s12018@gmail.com',
       subject: 'Last 5 motions',
-      text: 
+      text: fivemail
     };
       transporter.sendMail(mailOptions, function(error, info){
       if (error) {
@@ -87,21 +91,22 @@ ref.on("child_added", function(snapshot) {
       } else {
       console.log('Email sent: ' + info.response);
     }
-    mailOptions = {
-      from: 'fit3140.team15.s12018@gmail.com',
-      to: 'fit3140.team15.s12018@gmail.com',
-      subject: 'Motion in threshold',
-      text: 'The last motion was between ' + t1 +' and ' +t2
-    };
+
     if (endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]>t1 && endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]<t2)
     {
+      mailOptions = {
+        from: 'fit3140.team15.s12018@gmail.com',
+        to: 'fit3140.team15.s12018@gmail.com',
+        subject: 'Motion in threshold',
+        text: 'The last motion was between ' + t1 +' and ' +t2
+      };
       transporter.sendMail(mailOptions, function(error, info){
       if (error) {
       console.log(error);
       } else {
       console.log('Email sent: ' + info.response);
-    }
-});
+      }
+      });
     }
     else if (endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]>t2)
     {
