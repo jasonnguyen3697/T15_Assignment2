@@ -67,11 +67,11 @@ ref.on("child_added", function(snapshot) {
         fivemail+='\nMotion ';
         fivemail+=i;
         fivemail+=': Timestamp= ';
-        fivemail+=timestamparray[timestamparray.length-6+i]';
+        fivemail+=timestamparray[timestamparray.length-6+i];
         fivemail+=', start time= ';
-        fivemail+=starttimearray[starttimearray.length-6+i]';
+        fivemail+=starttimearray[starttimearray.length-6+i];
         fivemail+=', end time= ';
-        fivemail+=endtimearray[endtimearray.length-6+i]';
+        fivemail+=endtimearray[endtimearray.length-6+i];
       }
     }  
     console.log(timearray);
