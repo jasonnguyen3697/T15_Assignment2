@@ -81,7 +81,7 @@ ref.on("child_added", function(snapshot) {
     //Create mailing preference
     mailOptions = {
       from: 'fit3140.team15.s12018@gmail.com',
-      to: 'fit3140.team15.s12018@gmail.com',
+      to: 'jasonnguyen3697@gmail.com',
       subject: 'Last 5 motions',
       text: fivemail
     };
@@ -96,7 +96,7 @@ ref.on("child_added", function(snapshot) {
     {
       mailOptions = {
         from: 'fit3140.team15.s12018@gmail.com',
-        to: 'fit3140.team15.s12018@gmail.com',
+        to: 'jasonnguyen3697@gmail.com',
         subject: 'Motion in threshold',
         text: 'The last motion was between ' + t1 +' and ' +t2
       };
