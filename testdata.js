@@ -1,7 +1,6 @@
 //GOOGLE FIREBASE INITIALIZATION
 var admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
-var randomNumber = require("random-number-between");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -13,21 +12,22 @@ var ref = db.ref("/motionSensorData"); // channel name
 
 var starttime = 0;
 var endtime;
-var timestamp;
-
-starttime = randomNumber(starttime * 1000 + 7500, starttime * 1000 + 1000, 1)/1000;
-console.log(randomNumber(1, 10));
-
-for (i=0;i<15;i++)
+var timestamp= new Date();
+for (var i=0;i<1;i++)
 {
-  timestamp = new Date();
-  starttime = randomNumber(starttime * 1000 + 7500, starttime * 1000 + 1000)/1000;
-  endtime = randomNumber(starttime*1000+500, (starttime*1000)+8000)/1000;
+  //timestamp = new Date();
+  starttime = 4
+  endtime = 5
+    
   ref.push({
-    id:1,
-    start_time: starttime,
-    end_time: endtime,
-    time_stamp: timestamp
-  });
-  starttime = starttime + 7.5;
+    starttime: starttime,
+    endtime: endtime,
+    time_stamp: timestamp.toUTCString()
+  });   
+
 }
+
+//var jkjk={hello:{aloha:1,chocolate:5},mrric:{aloha:100,chocolate:99}};
+//console.log(Object.keys(jkjk));
+//console.log(jkjk[Object.keys(jkjk)[Object.keys(jkjk).length - 2]]);
+
