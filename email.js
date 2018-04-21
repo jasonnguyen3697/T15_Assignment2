@@ -40,11 +40,11 @@ var transporter = nodemailer.createTransport({
   }
 });
 var mailOptions;
-var fivemail='These are the last five motions:'
+
 
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
-
+    var fivemail='These are the last five motions:'
     idarray.push(newentry.id);
     timestamparray.push(newentry.time_stamp);
     starttimearray.push(newentry.start_time); //Append to an array so it is easier to operate on instead of getting from database
@@ -54,11 +54,11 @@ ref.on("child_added", function(snapshot) {
         fivemail+='\nMotion ';
         fivemail+=i;
         fivemail+=': Timestamp= ';
-        fivemail+=timestamparray[i]';
+        fivemail+=timestamparray[i];
         fivemail+=', start time= ';
-        fivemail+=starttimearray[i]';
+        fivemail+=starttimearray[i];
         fivemail+=', end time= ';
-        fivemail+=endtimearray[i]';
+        fivemail+=endtimearray[i];
       }
     }
     else
