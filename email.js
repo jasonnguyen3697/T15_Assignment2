@@ -96,7 +96,7 @@ ref.on("child_added", function(snapshot) {
         from: 'fit3140.team15.s12018@gmail.com',
         to: 'fit3140.team15.s12018@gmail.com',
         subject: 'Motion in threshold',
-        text: 'The last motion was between ' + t1 +' and ' +t2
+        text: 'The last motion at' + timestamparray[timestamparray.length-1] + 'was between ' + t1 +' and ' +t2
       };
       transporter.sendMail(mailOptions, function(error, info){
       if (error) {
