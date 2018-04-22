@@ -10,19 +10,6 @@ admin.initializeApp({
 var db = admin.database();
 var ref = db.ref("/motionSensorData"); // channel name
 
-//=============================================================SOCKETIO INITIALIZATION (FROM WEEK 2 LAB)==========================================================
-var fs =require('fs')
-         , http=require('http')
-         , socket=require('socket.io');
-
-var server=http.createServer(function(req, res) {
-            res.writeHead(200, { 'Content-type': 'text/html'});
-            res.end(fs.readFileSync(__dirname+'/index.html'));
-            }).listen(8080, function() {
-            console.log('Listening at: http://localhost:8080');
- });
-
- var io = socket(server);
 
 //====================================================================ARDUINO CODE===============================================================================
 var five = require("johnny-five");
@@ -102,65 +89,7 @@ ref.on("child_added", function(snapshot) {
 
 });
 
-//========================================================================SOCKETIO CODE===================================================================================
 
-io.listen(server).on('connection', function (socket) {
-    console.log('User Connected');
-    socket.on('sensorchange', function(){
-      if (sensoron){
-          sensoron=0;
-          starttime=0;
-          endtime=0;
-          socket.emit('Message','Sensor Disabled');
-          console.log('Sensor Disabled');
-      }
-      else{
-          sensoron=1;
-          socket.emit('Message', 'Sensor Enabled');
-          console.log('Sensor Enabled');
-      }
-    });
-
-    socket.on('ledchange', function(){
-      if (ledon){
-          ledstate=0;
-          ledcounter=0;
-          led.off().stop();
-          ledon=0;
-          socket.emit('Message','LED Disabled');
-          console.log('LED Disabled');
-      }
-      else{
-          ledon=1;
-          socket.emit('Message','LED Enabled');
-          console.log('LED Enabled');
-      }
-    });
-
-    socket.on('reset', function(){
-      ref.remove() //Clear the database
-          .then(function() {
-            idarray=[];
-            timearray=[];
-            console.log("Database cleared");
-      });
-    });
-
-    socket.on('msg',function(msg){ //Debugging tool to display stuff in node.js console
-        console.log(msg);
-    });
-  });
-
-
-    function CheckLEDState(){ //Function to illuminate corridor
-        if (ledon){ //Check if LED is enabled
-            if (ledstate && ledcounter>9667){ //Once 15 seconds elapsed, turn off led and reset everything
-                console.log('Stopped LED');
-                ledcounter=0;
-                ledstate=0;
-                led.stop().off();
-            }
-            else{
                 if (lednewperson){ //Check lednewperson flag every iteration to decide whether to extend illumination by 5 seconds
                     lednewperson=0;
                     console.log('On for 5 seconds')
