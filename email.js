@@ -11,7 +11,7 @@ var db = admin.database();
 var ref = db.ref("/motionSensorData"); // channel name
 
 var nodemailer = require('nodemailer');
-
+var startdate= new Date();
 var t1 = 2.5;
 var t2 = 5;
 var idarray=[];
@@ -25,17 +25,21 @@ var mailOptions;
 //When new data is uploaded
 ref.on("child_added", function(snapshot) {
     var newentry = snapshot.val();
+    var datecheck = new Date (newentry.time_stamp);
     var fivemail='These are the last five motions:'
     idarray.push(newentry.id);
+    
     timestamparray.push(newentry.time_stamp);
-    starttimearray.push(newentry.start_time); //Append to an array so it is easier to operate on instead of getting from database
-    endtimearray.push(newentry.end_time);
+    starttimearray.push(newentry.starttime); //Append to an array so it is easier to operate on instead of getting from database
+    endtimearray.push(newentry.endtime);
     //Create email content to send
+    if(datecheck.getTime()>startdate.getTime())
+    {
     if (timestamparray.length<5) {
       //If less than 5 motions have been recorded, only send the motions that have been recorded
       for (i=0;i<timestamparray.length;i++){
         fivemail+='\nMotion ';
-        fivemail+=i;
+        fivemail+=i+1;
         fivemail+=': Timestamp= ';
         fivemail+=timestamparray[i];
         fivemail+=', start time= ';
@@ -49,16 +53,16 @@ ref.on("child_added", function(snapshot) {
         //If 5 or more motions recorded, send five latest motions
         for (i=0;i<5;i++){
         fivemail+='\nMotion ';
-        fivemail+=i;
+        fivemail+=i+1;
         fivemail+=': Timestamp= ';
-        fivemail+=timestamparray[timestamparray.length-6+i];
+        fivemail+=timestamparray[timestamparray.length-5+i];
         fivemail+=', start time= ';
-        fivemail+=starttimearray[starttimearray.length-6+i];
+        fivemail+=starttimearray[starttimearray.length-5+i];
         fivemail+=', end time= ';
-        fivemail+=endtimearray[endtimearray.length-6+i];
+        fivemail+=endtimearray[endtimearray.length-5+i];
       }
     }
-    console.log(timestamparray);
+    
     var transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
       port: 465,
@@ -91,7 +95,7 @@ ref.on("child_added", function(snapshot) {
 
     if (endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]>t1 && endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]<t2)
     {
-      console.log('hi');
+      
       mailOptions = {
         from: 'fit3140.team15.s12018@gmail.com',
         to: 'fit3140.team15.s12018@gmail.com',
@@ -110,5 +114,5 @@ ref.on("child_added", function(snapshot) {
     {
       ref.remove();
     }
-
+  }
 });
