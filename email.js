@@ -14,20 +14,12 @@ var nodemailer = require('nodemailer');
 
 var t1 = 2.5;
 var t2 = 5;
+var idarray=[];
 var starttimearray=[];
 var endtimearray=[];
 var timestamparray=[];
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'fit3140.team15.s12018@gmail.com',
-    pass: 'fit3140t15'
-  },
-  tlc:{
-    rejectUnauthorized:false
-  }
-});
+
 var mailOptions;
 
 //When new data is uploaded
@@ -66,26 +58,43 @@ ref.on("child_added", function(snapshot) {
         fivemail+=endtimearray[endtimearray.length-6+i];
       }
     }
-    console.log(timearray);
-    //Create mailing preference
-    mailOptions = {
-      from: 'fit3140.team15.s12018@gmail.com',
-      to: 'jasonnguyen3697@gmail.com',
-      subject: 'Last 5 motions',
-      text: fivemail
-    };
-      transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-      console.log(error);
-      } else {
-      console.log('Email sent: ' + info.response);
-    }
+    console.log(timestamparray);
+    var transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      auth: {
+        user: 'fit3140.team15.s12018@gmail.com',
+        pass: 'fit3140t15'
+      },
+      tls: {
+        rejectUnauthorized:false
+      }
+    });
+    var mailOptions;
+    
+        mailOptions = {
+          from: 'fit3140.team15.s12018@gmail.com',
+          to: 'fit3140.team15.s12018@gmail.com',
+          subject: 'Last 5 motions',
+          text: fivemail
+        };
+          transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+          console.log(error);
+          } else {
+          console.log('Email sent: ' + info.response);
+        }
+        
+    });
+    
 
     if (endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]>t1 && endtimearray[endtimearray.length-1]-starttimearray[starttimearray.length-1]<t2)
     {
+      console.log('hi');
       mailOptions = {
         from: 'fit3140.team15.s12018@gmail.com',
-        to: 'jasonnguyen3697@gmail.com',
+        to: 'fit3140.team15.s12018@gmail.com',
         subject: 'Motion in threshold',
         text: 'The last motion was between ' + t1 +' and ' +t2
       };
